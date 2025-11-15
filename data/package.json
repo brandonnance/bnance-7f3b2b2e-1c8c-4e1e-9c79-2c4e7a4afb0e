@@ -1,0 +1,11 @@
+{
+  "name": "@bnance-7f3b2b2e-1c8c-4e1e-9c79-2c4e7a4afb0e/data",
+  "version": "0.0.1",
+  "private": true,
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
