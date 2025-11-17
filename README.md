@@ -214,6 +214,7 @@ timestamp: Date
 # 📐 ERD
 
 ```mermaid
+erDiagram
 
     ORGANIZATION ||--o{ USER : "has many"
     ORGANIZATION ||--o{ TASK : "has many"
