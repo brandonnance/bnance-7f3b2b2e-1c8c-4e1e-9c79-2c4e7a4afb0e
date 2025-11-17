@@ -2,48 +2,90 @@
 
 A clean, modern Angular + Tailwind demo showcasing authentication, a Kanban-style task dashboard, statistics, and a light/dark theme system.
 
----
-
-## 📸 Screenshots
-
-### **Login – Dark Theme**
-![Login Screen – Dark](screenshots/Screenshot-2025-11-17-093806.png)
-
-### **Dashboard – Dark Theme**
-![Dashboard – Dark](screenshots/Screenshot-2025-11-17-093814.png)
-
-### **Dashboard – Light Theme**
-![Dashboard – Light](screenshots/Screenshot-2025-11-17-093823.png)
-
-> Place the PNG files inside a `/screenshots` folder in your repo.
+**Author:** Brandon Nance
 
 ---
 
-## 🚀 Features
+# 📚 Table of Contents
 
-- 🔐 **Authentication** (email + password)
-- 🌗 **Light & Dark Mode** toggle
-- 🧱 **Kanban Layout** – Open / In Progress / Done
-- ✏️ Inline task editing
-- ➕ Task creation panel
-- 📊 Completion & status metrics
-- 📱 Fully responsive centered layout  
-- 🎨 Clean theme-driven UI with @apply utilities in SCSS
+- [Overview](#overview)  
+- [Tech Stack](#tech-stack)  
+- [Features](#features)
+- [Setup Instructions](#setup-instructions) 
+- [Architecture](#architecture)  
+- [Data Models](#data-models)  
+- [ERD](#erd)  
+- [Authentication & Access Control](#authentication--access-control)  
+- [API Reference](#api-reference)  
+- [Frontend Overview](#frontend-overview)   
+- [Future Considerations](#future-considerations)  
+- [Screenshots](#screenshots)
 
-- Drag/Drop functionality not implemented due to time constraints.  
+---
+
+# 📌 Overview
+
+The **Task Scheduler** is a role-based, organization-scoped task management application built inside an Nx monorepo. It includes:
+
+- Secure JWT login  
+- Full RBAC permission system (Owner / Admin / Viewer)  
+- Multi-organization scoping  
+- CRUD operations for tasks  
+- Audit logging  
+- Angular UI with TailwindCSS  
+- Dark/Light Mode  
+- Status breakdown visualization  
+
+_No drag-and-drop functionality is included in this implementation._
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Angular 17+** (standalone components)
-- **TypeScript**
-- **SCSS with Tailwind utility patterns**
-- **Node.js (LTS)**
+### **Backend**
+- NestJS (REST API)
+- TypeORM
+- SQLite
+- JWT Authentication
+- RBAC via Nest Guards
+
+### **Frontend**
+- Angular (Standalone components)
+- TailwindCSS
+
+### **Monorepo**
+- Nx Workspaces
 
 ---
 
-## 📦 Installation
+## 🚀 Features
+
+### **Authentication**
+- Email + password login  
+- JWT token generation + verification  
+
+### **Role-Based Access Control**
+- Owner → full system access  
+- Admin → full organization access  
+- Viewer → read-only  
+
+### **Task Management**
+- View tasks by status  
+- Create, edit, delete tasks  
+- Tasks scoped to user’s organization  
+
+### **Audit Logging**
+- Records all create/update/delete operations  
+- Admin/Owner-only access  
+
+### **UI Enhancements**
+- Light/Dark mode toggle  
+- Responsive layout  
+- Status visualization bar 
+
+---
+
+## 📦 Setup Instructions
 
 ### 1. Clone the repository
 
@@ -79,7 +121,7 @@ http://localhost:4200
 
 ---
 
-## 📁 Project Structure
+## 📁 Architecture
 
 ```
 apps/
@@ -107,20 +149,215 @@ screenshots/  <- screenshot PNGs
 dev.sqlite   <- dev DB
 ```
 
+### **Backend Architecture**
+Modules:
+- AuthModule  
+- TasksModule  
+- AuditLogModule  
+- OrganizationsModule  
+- UsersModule  
+
+Guards handle RBAC and org-level scoping.
+
+### **Frontend Architecture**
+- Angular standalone components  
+- Auth stored in localStorage  
+- API services for Tasks and Auth  
+- Styled with TailwindCSS
+  
 ---
 
-## 📝 Notes on Screenshots
+# 🧱 Data Models
 
-Your repo should contain:
-
+### **User**
 ```
-screenshots/
-  Screenshot-2025-11-17-093806.png
-  Screenshot-2025-11-17-093814.png
-  Screenshot-2025-11-17-093823.png
+id: string
+name: string
+email: string
+passwordHash: string
+role: OWNER | ADMIN | VIEWER
+organizationId: string
 ```
 
-GitHub will automatically render them in this README.
+### **Organization**
+```
+id: string
+name: string
+parentId?: string
+```
+
+### **Task**
+```
+id: string
+title: string
+description?: string
+status: OPEN | IN_PROGRESS | DONE
+dueDate?: Date
+assigneeId?: string
+organizationId: string
+createdAt: Date
+updatedAt: Date
+```
+
+### **AuditLog**
+```
+id: string
+userId: string
+role: string
+action: string
+endpoint: string
+timestamp: Date
+```
+
+---
+
+# 📐 ERD
+
+```mermaid
+
+    ORGANIZATION ||--o{ USER : "has many"
+    ORGANIZATION ||--o{ TASK : "has many"
+
+    USER ||--o{ TASK : "assigned tasks"
+    USER ||--o{ AUDITLOG : "creates logs"
+```
+
+---
+
+# 🔐 Authentication & Access Control
+
+### **Permission Matrix**
+
+| Role   | View Tasks | Create | Edit | Delete | Audit Logs |
+|--------|------------|--------|------|--------|------------|
+| **OWNER** | ✔ | ✔ | ✔ | ✔ | ✔ |
+| **ADMIN** | ✔ | ✔ | ✔ | ✔ | ✔ |
+| **VIEWER** | ✔ | ✖ | ✖ | ✖ | ✖ |
+
+---
+
+# 📡 API Reference
+
+Base URL:
+```
+http://localhost:3000/api
+```
+
+---
+
+## 🔐 POST /auth/login
+
+### Request
+```json
+{
+  "email": "admin@example.com",
+  "password": "password123"
+}
+```
+
+### Response
+```json
+{
+  "access_token": "..."
+}
+```
+
+---
+
+## 📌 GET /tasks
+
+### Response
+```json
+[
+  {
+    "id": "123",
+    "title": "Prepare project briefing",
+    "status": "OPEN",
+    "organizationId": "ORG-A"
+  }
+]
+```
+
+---
+
+## 📝 POST /tasks
+
+### Request
+```json
+{
+  "title": "New Task",
+  "status": "OPEN",
+  "organizationId": "ORG-A"
+}
+```
+
+### Response
+```json
+{
+  "id": "abc",
+  "title": "New Task",
+  "status": "OPEN"
+}
+```
+
+---
+
+## ✏️ PUT /tasks/:id
+
+### Request
+```json
+{
+  "title": "Updated Task",
+  "status": "IN_PROGRESS"
+}
+```
+
+### Response
+```json
+{
+  "id": "abc",
+  "title": "Updated Task",
+  "status": "IN_PROGRESS"
+}
+```
+
+---
+
+## ❌ DELETE /tasks/:id
+
+### Response
+```json
+{
+  "success": true,
+  "deletedId": "abc"
+}
+```
+
+---
+
+# 🧭 Future Considerations
+
+### **1. Trello-Style Custom Status Columns**  
+### **2. Drag & Drop (Angular CDK)**  
+### **3. Real-Time WebSockets Collaboration**  
+### **4. Admin UI for Organizations**  
+### **5. Advanced Analytics & Charts**  
+### **6. Postgres Migration**  
+
+---
+
+## 📸 Screenshots
+
+### **Login – Dark Theme**
+![Login Screen – Dark](screenshots/Screenshot-2025-11-17-093806.png)
+
+### **Dashboard – Dark Theme**
+![Dashboard – Dark](screenshots/Screenshot-2025-11-17-093814.png)
+
+### **Dashboard – Light Theme**
+![Dashboard – Light](screenshots/Screenshot-2025-11-17-093823.png)
+
+> Place the PNG files inside a `/screenshots` folder in your repo.
 
 ---
 
