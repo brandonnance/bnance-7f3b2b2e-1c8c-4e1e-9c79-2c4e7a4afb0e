@@ -21,14 +21,16 @@ A clean, modern Angular + Tailwind demo showcasing authentication, a Kanban-styl
 
 ## 🚀 Features
 
-- 🔐 **Demo Authentication** (email + password)
+- 🔐 **Authentication** (email + password)
 - 🌗 **Light & Dark Mode** toggle
 - 🧱 **Kanban Layout** – Open / In Progress / Done
 - ✏️ Inline task editing
 - ➕ Task creation panel
 - 📊 Completion & status metrics
-- 📱 Fully responsive centered “app window” layout  
+- 📱 Fully responsive centered layout  
 - 🎨 Clean theme-driven UI with @apply utilities in SCSS
+
+- Drag/Drop functionality not implemented due to time constraints.  
 
 ---
 
@@ -37,7 +39,6 @@ A clean, modern Angular + Tailwind demo showcasing authentication, a Kanban-styl
 - **Angular 17+** (standalone components)
 - **TypeScript**
 - **SCSS with Tailwind utility patterns**
-- **Optional Nx workspace support**
 - **Node.js (LTS)**
 
 ---
