@@ -47,7 +47,7 @@ A clean, modern Angular + Tailwind demo showcasing authentication, a Kanban-styl
 ### 1. Clone the repository
 
 ```bash
-git clone <YOUR_REPO_URL>.git
+git clone https://github.com/brandonnance/bnance-7f3b2b2e-1c8c-4e1e-9c79-2c4e7a4afb0e.git
 cd <your-project-folder>
 ```
 
