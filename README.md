@@ -63,16 +63,11 @@ yarn
 
 ### 3. Start the dev server
 
-Angular CLI:
+Nx:
 
 ```bash
-ng serve
-```
-
-or if using Nx:
-
-```bash
-npx nx serve task-scheduler
+npx nx serve api
+npx nx serve dashboard
 ```
 
 Then visit:
@@ -86,31 +81,29 @@ http://localhost:4200
 ## 📁 Project Structure
 
 ```
-src/
-  app/
-    app.component.ts
-    app.component.html
-    app.component.scss
-styles.scss   <- global SCSS (themes + utilities)
+apps/
+  api/
+    src/
+      main.ts
+      app/
+        access-control
+        audit-log
+        auth
+        entities
+        tasks
+        app.controller.ts
+        app.module.ts
+        app.service.ts
+dashboard/
+  src/
+    styles.scss   <- global SCSS (themes + utilities)
+    app/
+      auth
+      tasks
+      app.html
+      app.ts
 screenshots/  <- screenshot PNGs
-```
-
----
-
-## 🧪 Useful Scripts
-
-```bash
-npm run start
-npm run lint
-npm run test
-```
-
-Nx variants:
-
-```bash
-npx nx graph
-npx nx serve <project>
-npx nx test <project>
+dev.sqlite   <- dev DB
 ```
 
 ---
@@ -130,6 +123,4 @@ GitHub will automatically render them in this README.
 
 ---
 
-## 📄 License
 
-MIT — or update to your preferred license.
