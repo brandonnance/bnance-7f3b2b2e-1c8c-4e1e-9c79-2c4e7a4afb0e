@@ -1,329 +1,135 @@
-# 🚀 Task Scheduler  
-A full-stack task management platform built with **Nx**, **NestJS**, **Angular**, **TypeORM**, **JWT Authentication**, and **TailwindCSS**.
+# Task Scheduler – Role-based Task Management Demo
 
-![License](https://img.shields.io/badge/license-MIT-green)
-![Status](https://img.shields.io/badge/status-active-brightgreen)
-![Node](https://img.shields.io/badge/node-18+-green)
-![Nx](https://img.shields.io/badge/monorepo-Nx-blue)
-
-**Author:** Brandon Nance
+A clean, modern Angular + Tailwind demo showcasing authentication, a Kanban-style task dashboard, statistics, and a light/dark theme system.
 
 ---
 
-# 📚 Table of Contents
+## 📸 Screenshots
 
-- [Overview](#overview)  
-- [Tech Stack](#tech-stack)  
-- [Features](#features)  
-- [Architecture](#architecture)  
-- [Data Models](#data-models)  
-- [ERD](#erd)  
-- [Authentication & Access Control](#authentication--access-control)  
-- [API Reference](#api-reference)  
-- [Frontend Overview](#frontend-overview)  
-- [Setup Instructions](#setup-instructions)  
-- [Future Considerations](#future-considerations)  
-- [Screenshots](#screenshots)
+### **Login – Dark Theme**
+![Login Screen – Dark](screenshots/Screenshot-2025-11-17-093806.png)
+
+### **Dashboard – Dark Theme**
+![Dashboard – Dark](screenshots/Screenshot-2025-11-17-093814.png)
+
+### **Dashboard – Light Theme**
+![Dashboard – Light](screenshots/Screenshot-2025-11-17-093823.png)
+
+> Place the PNG files inside a `/screenshots` folder in your repo.
 
 ---
 
-# 📌 Overview
+## 🚀 Features
 
-The **Task Scheduler** is a role-based, organization-scoped task management application built inside an Nx monorepo. It includes:
-
-- Secure JWT login  
-- Full RBAC permission system (Owner / Admin / Viewer)  
-- Multi-organization scoping  
-- CRUD operations for tasks  
-- Audit logging  
-- Angular UI with TailwindCSS  
-- Dark/Light Mode  
-- Status breakdown visualization  
-
-_No drag-and-drop functionality is included in this implementation._
+- 🔐 **Demo Authentication** (email + password)
+- 🌗 **Light & Dark Mode** toggle
+- 🧱 **Kanban Layout** – Open / In Progress / Done
+- ✏️ Inline task editing
+- ➕ Task creation panel
+- 📊 Completion & status metrics
+- 📱 Fully responsive centered “app window” layout  
+- 🎨 Clean theme-driven UI with @apply utilities in SCSS
 
 ---
 
-# 🛠 Tech Stack
+## 🛠 Tech Stack
 
-### **Backend**
-- NestJS (REST API)
-- TypeORM
-- SQLite
-- JWT Authentication
-- RBAC via Nest Guards
-
-### **Frontend**
-- Angular (Standalone components)
-- TailwindCSS
-- LocalStorage-based JWT handling
-
-### **Monorepo**
-- Nx Workspaces
-- Shared libs for entities and auth types
+- **Angular 17+** (standalone components)
+- **TypeScript**
+- **SCSS with Tailwind utility patterns**
+- **Optional Nx workspace support**
+- **Node.js (LTS)**
 
 ---
 
-# ⭐ Features
+## 📦 Installation
 
-### **Authentication**
-- Email + password login  
-- JWT token generation + verification  
+### 1. Clone the repository
 
-### **Role-Based Access Control**
-- Owner → full system access  
-- Admin → full organization access  
-- Viewer → read-only  
-
-### **Task Management**
-- View tasks by status  
-- Create, edit, delete tasks  
-- Tasks scoped to user’s organization  
-
-### **Audit Logging**
-- Records all create/update/delete operations  
-- Admin/Owner-only access  
-
-### **UI Enhancements**
-- Light/Dark mode toggle  
-- Responsive layout  
-- Status visualization bar  
-
----
-
-# 🏗 Architecture
-
-### **Monorepo Layout**
-
-```
-apps/
-  api/          # NestJS backend
-  dashboard/    # Angular frontend
-
-libs/
-  data/         # Entities, enums, permissions
-  auth/         # Auth DTOs and interfaces
+```bash
+git clone <YOUR_REPO_URL>.git
+cd <your-project-folder>
 ```
 
-### **Backend Architecture**
-Modules:
-- AuthModule  
-- TasksModule  
-- AuditLogModule  
-- OrganizationsModule  
-- UsersModule  
+### 2. Install dependencies
 
-Guards handle RBAC and org-level scoping.
-
-### **Frontend Architecture**
-- Angular standalone components  
-- Auth stored in localStorage  
-- API services for Tasks and Auth  
-- Styled with TailwindCSS  
-
-### **Why Nx?**
-- Single workspace  
-- Unified scripts and tooling  
-- Ability to share TypeScript models  
-
----
-
-# 🧱 Data Models
-
-### **User**
-```
-id: string
-name: string
-email: string
-passwordHash: string
-role: OWNER | ADMIN | VIEWER
-organizationId: string
+```bash
+npm install
+# or
+pnpm install
+# or
+yarn
 ```
 
-### **Organization**
-```
-id: string
-name: string
-parentId?: string
+### 3. Start the dev server
+
+Angular CLI:
+
+```bash
+ng serve
 ```
 
-### **Task**
-```
-id: string
-title: string
-description?: string
-status: OPEN | IN_PROGRESS | DONE
-dueDate?: Date
-assigneeId?: string
-organizationId: string
-createdAt: Date
-updatedAt: Date
+or if using Nx:
+
+```bash
+npx nx serve task-scheduler
 ```
 
-### **AuditLog**
+Then visit:
+
 ```
-id: string
-userId: string
-role: string
-action: string
-endpoint: string
-timestamp: Date
+http://localhost:4200
 ```
 
 ---
 
-# 📐 ERD
+## 📁 Project Structure
 
-```mermaid
-erDiagram
-
-    ORGANIZATION ||--o{ USER : "has many"
-    ORGANIZATION ||--o{ TASK : "has many"
-
-    USER ||--o{ TASK : "assigned tasks"
-    USER ||--o{ AUDITLOG : "creates logs"
+```
+src/
+  app/
+    app.component.ts
+    app.component.html
+    app.component.scss
+styles.scss   <- global SCSS (themes + utilities)
+screenshots/  <- screenshot PNGs
 ```
 
 ---
 
-# 🔐 Authentication & Access Control
+## 🧪 Useful Scripts
 
-### **Permission Matrix**
-
-| Role   | View Tasks | Create | Edit | Delete | Audit Logs |
-|--------|------------|--------|------|--------|------------|
-| **OWNER** | ✔ | ✔ | ✔ | ✔ | ✔ |
-| **ADMIN** | ✔ | ✔ | ✔ | ✔ | ✔ |
-| **VIEWER** | ✔ | ✖ | ✖ | ✖ | ✖ |
-
----
-
-# 📡 API Reference
-
-Base URL:
+```bash
+npm run start
+npm run lint
+npm run test
 ```
-http://localhost:3000/api
+
+Nx variants:
+
+```bash
+npx nx graph
+npx nx serve <project>
+npx nx test <project>
 ```
 
 ---
 
-## 🔐 POST /auth/login
+## 📝 Notes on Screenshots
 
-### Request
-```json
-{
-  "email": "admin@example.com",
-  "password": "password123"
-}
+Your repo should contain:
+
+```
+screenshots/
+  Screenshot-2025-11-17-093806.png
+  Screenshot-2025-11-17-093814.png
+  Screenshot-2025-11-17-093823.png
 ```
 
-### Response
-```json
-{
-  "access_token": "..."
-}
-```
+GitHub will automatically render them in this README.
 
 ---
 
-## 📌 GET /tasks
+## 📄 License
 
-### Response
-```json
-[
-  {
-    "id": "123",
-    "title": "Prepare project briefing",
-    "status": "OPEN",
-    "organizationId": "ORG-A"
-  }
-]
-```
-
----
-
-## 📝 POST /tasks
-
-### Request
-```json
-{
-  "title": "New Task",
-  "status": "OPEN",
-  "organizationId": "ORG-A"
-}
-```
-
-### Response
-```json
-{
-  "id": "abc",
-  "title": "New Task",
-  "status": "OPEN"
-}
-```
-
----
-
-## ✏️ PUT /tasks/:id
-
-### Request
-```json
-{
-  "title": "Updated Task",
-  "status": "IN_PROGRESS"
-}
-```
-
-### Response
-```json
-{
-  "id": "abc",
-  "title": "Updated Task",
-  "status": "IN_PROGRESS"
-}
-```
-
----
-
-## ❌ DELETE /tasks/:id
-
-### Response
-```json
-{
-  "success": true,
-  "deletedId": "abc"
-}
-```
-
----
-
-# 🎨 Frontend Overview
-
-- Angular standalone components  
-- TailwindCSS styling  
-- Dark/Light mode  
-- Task status visualization bar  
-- JWT authentication  
-
----
-
-# 🧭 Future Considerations
-
-### **1. Trello-Style Custom Status Columns**  
-### **2. Drag & Drop (Angular CDK)**  
-### **3. Real-Time WebSockets Collaboration**  
-### **4. Admin UI for Organizations**  
-### **5. Advanced Analytics & Charts**  
-### **6. Postgres Migration**  
-
----
-
-# 🖼 Screenshots
-
-*(Add your images here)*
-
-```
-![Login Screen](./screenshots/login.png)
-![Dashboard](./screenshots/dashboard.png)
-![Dark Mode](./screenshots/dark-mode.png)
-```
+MIT — or update to your preferred license.

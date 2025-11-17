@@ -4,20 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth/auth.service';
 import { TasksService } from './tasks/tasks.service';
 import { Task } from './tasks/task.model';
-import {
-  CdkDrag,
-  CdkDropList,
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
+import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   standalone: true,
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
-  imports: [NgIf, NgFor, FormsModule, DatePipe, CdkDropList, CdkDrag],
+  imports: [NgIf, NgFor, FormsModule, DatePipe],
 })
 export class AppComponent {
   email = 'owner@example.com';
