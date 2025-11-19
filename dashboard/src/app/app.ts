@@ -5,6 +5,7 @@ import { AuthService } from './auth/auth.service';
 import { TasksService } from './tasks/tasks.service';
 import { Task } from './tasks/task.model';
 import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Observable } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -19,6 +20,8 @@ export class AppComponent {
   loading = false;
   error: string | null = null;
   isAuthenticated = false;
+
+  canModifyTasks = false;
 
   tasks: Task[] = [];
   tasksLoading = false;
@@ -100,12 +103,17 @@ export class AppComponent {
     this.setTheme(!this.isDarkMode);
   }
 
+  // Constructor
   constructor(private auth: AuthService, private tasksService: TasksService) {
     this.auth.isAuthenticated$.subscribe((val) => {
       this.isAuthenticated = val;
       if (val) {
+        const role = this.auth.getRole();
+        this.canModifyTasks = role === 'ADMIN' || role === 'OWNER';
+
         this.loadTasks();
       } else {
+        this.canModifyTasks = false;
         this.tasks = [];
       }
     });
@@ -149,12 +157,18 @@ export class AppComponent {
   createTask() {
     if (!this.newTask.title.trim()) return;
 
+    const organizationId = this.auth.getOrganizationId();
+    if (!organizationId) {
+      console.error('No organizationId found for user — cannot create task');
+      return;
+    }
+
     this.tasksService
       .createTask({
         title: this.newTask.title,
         description: this.newTask.description,
         status: this.newTask.status,
-        organizationId: 'ORG-A',
+        organizationId,
       })
       .subscribe({
         next: () => {

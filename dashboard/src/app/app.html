@@ -266,8 +266,13 @@
                 *ngIf="!tasksLoading && tasks.length === 0"
                 class="text-sm text-slate-500 py-4 text-center border border-dashed border-slate-700 rounded-xl"
               >
-                No tasks yet. Use the panel on the right to create your first
-                one.
+                <ng-container *ngIf="canModifyTasks; else readOnlyEmptyState">
+                  No tasks yet. Use the panel on the right to create your first
+                  one.
+                </ng-container>
+                <ng-template #readOnlyEmptyState>
+                  No tasks assigned yet.
+                </ng-template>
               </div>
 
               <!-- Kanban layout -->
@@ -295,7 +300,7 @@
                     >
                       <!-- Delete button (hidden while editing) -->
                       <button
-                        *ngIf="editingTaskId !== task.id"
+                        *ngIf="canModifyTasks && editingTaskId !== task.id"
                         (click)="deleteTask(task.id)"
                         class="absolute top-1.5 right-1.5 text-slate-500 hover:text-red-400 text-[11px]"
                         title="Delete task"
@@ -336,6 +341,7 @@
 
                         <div class="pt-1">
                           <button
+                            *ngIf="canModifyTasks"
                             (click)="startEdit(task)"
                             class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
                           >
@@ -343,6 +349,7 @@
                           </button>
                           <br /><br />
                           <button
+                            *ngIf="canModifyTasks"
                             (click)="changeTaskStatus(task, 'IN_PROGRESS')"
                             class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
                           >
@@ -350,6 +357,7 @@
                           </button>
                           <br />
                           <button
+                            *ngIf="canModifyTasks"
                             (click)="changeTaskStatus(task, 'DONE')"
                             class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
                           >
@@ -419,7 +427,7 @@
                       class="rounded-lg border border-slate-700/50 p-3 text-xs space-y-1 relative"
                     >
                       <button
-                        *ngIf="editingTaskId !== task.id"
+                        *ngIf="canModifyTasks && editingTaskId !== task.id"
                         (click)="deleteTask(task.id)"
                         class="absolute top-1.5 right-1.5 text-slate-500 hover:text-red-400 text-[11px]"
                         title="Delete task"
@@ -459,6 +467,7 @@
 
                         <div class="pt-1">
                           <button
+                            *ngIf="canModifyTasks"
                             (click)="startEdit(task)"
                             class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
                           >
@@ -466,6 +475,7 @@
                           </button>
                           <br /><br />
                           <button
+                            *ngIf="canModifyTasks"
                             (click)="changeTaskStatus(task, 'OPEN')"
                             class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
                           >
@@ -473,6 +483,7 @@
                           </button>
                           <br />
                           <button
+                            *ngIf="canModifyTasks"
                             (click)="changeTaskStatus(task, 'DONE')"
                             class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
                           >
@@ -539,7 +550,7 @@
                       class="rounded-lg border border-slate-700/50 p-3 text-xs space-y-1 relative"
                     >
                       <button
-                        *ngIf="editingTaskId !== task.id"
+                        *ngIf="canModifyTasks && editingTaskId !== task.id"
                         (click)="deleteTask(task.id)"
                         class="absolute top-1.5 right-1.5 text-slate-500 hover:text-red-400 text-[11px]"
                         title="Delete task"
@@ -580,6 +591,7 @@
 
                         <div class="pt-1">
                           <button
+                            *ngIf="canModifyTasks"
                             (click)="startEdit(task)"
                             class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
                           >
@@ -587,6 +599,7 @@
                           </button>
                           <br /><br />
                           <button
+                            *ngIf="canModifyTasks"
                             (click)="changeTaskStatus(task, 'IN_PROGRESS')"
                             class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
                           >
@@ -594,6 +607,7 @@
                           </button>
                           <br />
                           <button
+                            *ngIf="canModifyTasks"
                             (click)="changeTaskStatus(task, 'OPEN')"
                             class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
                           >
@@ -645,59 +659,63 @@
 
             <!-- Create Task column -->
             <aside class="card-shell rounded-2xl p-4 md:p-5 space-y-4">
-              <div>
-                <h2 class="text-sm font-semibold">Create New Task</h2>
-              </div>
-
-              <form (ngSubmit)="createTask()" class="space-y-3">
+              <div *ngIf="canModifyTasks">
                 <div>
-                  <label class="block text-xs font-medium mb-1"> Title </label>
-                  <input
-                    type="text"
-                    [(ngModel)]="newTask.title"
-                    name="title"
-                    placeholder="e.g. Review vet records"
-                    class="w-full rounded-md px-3 py-2 text-sm"
-                  />
+                  <h2 class="text-sm font-semibold">Create New Task</h2>
                 </div>
 
-                <div>
-                  <label class="block text-xs font-medium mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    [(ngModel)]="newTask.description"
-                    name="description"
-                    rows="3"
-                    placeholder="Optional details or context for this task"
-                    class="w-full rounded-md px-3 py-2 text-sm"
-                  ></textarea>
-                </div>
-
-                <div class="flex items-center gap-3">
-                  <div class="flex-1">
+                <form (ngSubmit)="createTask()" class="space-y-3">
+                  <div>
                     <label class="block text-xs font-medium mb-1">
-                      Status
+                      Title
                     </label>
-                    <select
-                      [(ngModel)]="newTask.status"
-                      name="status"
-                      class="w-full rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                    >
-                      <option value="OPEN">Open</option>
-                      <option value="IN_PROGRESS">In Progress</option>
-                      <option value="DONE">Done</option>
-                    </select>
+                    <input
+                      type="text"
+                      [(ngModel)]="newTask.title"
+                      name="title"
+                      placeholder="e.g. Review vet records"
+                      class="w-full rounded-md px-3 py-2 text-sm"
+                    />
                   </div>
-                </div>
 
-                <button
-                  type="submit"
-                  class="w-full mt-1 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 rounded-lg text-slate-900 text-sm font-semibold transition-colors"
-                >
-                  Create Task
-                </button>
-              </form>
+                  <div>
+                    <label class="block text-xs font-medium mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      [(ngModel)]="newTask.description"
+                      name="description"
+                      rows="3"
+                      placeholder="Optional details or context for this task"
+                      class="w-full rounded-md px-3 py-2 text-sm"
+                    ></textarea>
+                  </div>
+
+                  <div class="flex items-center gap-3">
+                    <div class="flex-1">
+                      <label class="block text-xs font-medium mb-1">
+                        Status
+                      </label>
+                      <select
+                        [(ngModel)]="newTask.status"
+                        name="status"
+                        class="w-full rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                      >
+                        <option value="OPEN">Open</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="DONE">Done</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="w-full mt-1 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 rounded-lg text-slate-900 text-sm font-semibold transition-colors"
+                  >
+                    Create Task
+                  </button>
+                </form>
+              </div>
             </aside>
           </div>
         </section>

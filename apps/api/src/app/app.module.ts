@@ -13,6 +13,7 @@ import { AccessControlModule } from './access-control/access-control.module';
 import { AuditLog } from './audit-log/audit-log.entity';
 import { AuditLogModule } from './audit-log/audit-log.module';
 import { AuthModule } from './auth/auth.module';
+import { SeedService } from './seed.service';
 
 @Module({
   imports: [
@@ -30,6 +31,6 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forFeature([User, Organization, Role, Permission, Task]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SeedService],
 })
 export class AppModule {}
