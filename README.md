@@ -365,7 +365,8 @@ Task Scheduler – role-based task management demo with a clean Angular + Tailwi
 ## ▶️ Frontend quickstart
 
 ```bash
-ng serve          # or: npx nx serve task-scheduler
+npx nx serve api
+npx nx serve dashboard
 # then visit http://localhost:4200
 ```
 
