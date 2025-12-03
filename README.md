@@ -1,82 +1,366 @@
-# Bnance7f3b2b2e1c8c4e1e9c792c4e7a4afb0e
+# 🚀 Task Scheduler  
+A full-stack task management platform built with **Nx**, **NestJS**, **Angular**, **TypeORM**, **JWT Authentication**, and **TailwindCSS**.
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+![Node](https://img.shields.io/badge/node-18+-green)
+![Nx](https://img.shields.io/badge/monorepo-Nx-blue)
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+**Author:** Brandon Nance
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+---
 
-## Finish your CI setup
+# 📚 Table of Contents
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/ey8SQN0Izk)
+- [Overview](#overview)  
+- [Tech Stack](#tech-stack)  
+- [Features](#features)  
+- [Architecture](#architecture)  
+- [Data Models](#data-models)  
+- [ERD](#erd)  
+- [Authentication & Access Control](#authentication--access-control)  
+- [API Reference](#api-reference)  
+- [Frontend Overview](#frontend-overview)  
+- [Setup Instructions](#setup-instructions)  
+- [Future Considerations](#future-considerations)  
+- [Screenshots](#screenshots)
 
+---
 
-## Run tasks
+# 📌 Overview
 
-To run the dev server for your app, use:
+The **Task Scheduler** is a role-based, organization-scoped task management application built inside an Nx monorepo. It includes:
 
-```sh
-npx nx serve api
+- Secure JWT login  
+- Full RBAC permission system (Owner / Admin / Viewer)  
+- Multi-organization scoping  
+- CRUD operations for tasks  
+- Audit logging  
+- Angular UI with TailwindCSS  
+- Dark/Light Mode  
+- Status breakdown visualization  
+
+_No drag-and-drop functionality is included in this implementation._
+
+---
+
+# 🛠 Tech Stack
+
+### **Backend**
+- NestJS (REST API)
+- TypeORM
+- SQLite
+- JWT Authentication
+- RBAC via Nest Guards
+
+### **Frontend**
+- Angular (Standalone components)
+- TailwindCSS
+- LocalStorage-based JWT handling
+
+### **Monorepo**
+- Nx Workspaces
+- Shared libs for entities and auth types
+
+---
+
+# ⭐ Features
+
+### **Authentication**
+- Email + password login  
+- JWT token generation + verification  
+
+### **Role-Based Access Control**
+- Owner → full system access  
+- Admin → full organization access  
+- Viewer → read-only  
+
+### **Task Management**
+- View tasks by status  
+- Create, edit, delete tasks  
+- Tasks scoped to user’s organization  
+
+### **Audit Logging**
+- Records all create/update/delete operations  
+- Admin/Owner-only access  
+
+### **UI Enhancements**
+- Light/Dark mode toggle  
+- Responsive layout  
+- Status visualization bar  
+
+---
+
+# 🏗 Architecture
+
+### **Monorepo Layout**
+
+```
+apps/
+  api/          # NestJS backend
+  dashboard/    # Angular frontend
+
+libs/
+  data/         # Entities, enums, permissions
+  auth/         # Auth DTOs and interfaces
 ```
 
-To create a production bundle:
+### **Backend Architecture**
+Modules:
+- AuthModule  
+- TasksModule  
+- AuditLogModule  
+- OrganizationsModule  
+- UsersModule  
 
-```sh
-npx nx build api
+Guards handle RBAC and org-level scoping.
+
+### **Frontend Architecture**
+- Angular standalone components  
+- Auth stored in localStorage  
+- API services for Tasks and Auth  
+- Styled with TailwindCSS  
+
+### **Why Nx?**
+- Single workspace  
+- Unified scripts and tooling  
+- Ability to share TypeScript models  
+
+---
+
+# 🧱 Data Models
+
+### **User**
+```
+id: string
+name: string
+email: string
+passwordHash: string
+role: OWNER | ADMIN | VIEWER
+organizationId: string
 ```
 
-To see all available targets to run for a project, run:
-
-```sh
-npx nx show project api
+### **Organization**
+```
+id: string
+name: string
+parentId?: string
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/nest:app demo
+### **Task**
+```
+id: string
+title: string
+description?: string
+status: OPEN | IN_PROGRESS | DONE
+dueDate?: Date
+assigneeId?: string
+organizationId: string
+createdAt: Date
+updatedAt: Date
 ```
 
-To generate a new library, use:
-
-```sh
-npx nx g @nx/node:lib mylib
+### **AuditLog**
+```
+id: string
+userId: string
+role: string
+action: string
+endpoint: string
+timestamp: Date
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+---
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+# 📐 ERD
 
+```mermaid
+erDiagram
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+    ORGANIZATION ||--o{ USER : "has many"
+    ORGANIZATION ||--o{ TASK : "has many"
 
-## Install Nx Console
+    USER ||--o{ TASK : "assigned tasks"
+    USER ||--o{ AUDITLOG : "creates logs"
+```
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+---
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+# 🔐 Authentication & Access Control
 
-## Useful links
+### **Permission Matrix**
 
-Learn more:
+| Role   | View Tasks | Create | Edit | Delete | Audit Logs |
+|--------|------------|--------|------|--------|------------|
+| **OWNER** | ✔ | ✔ | ✔ | ✔ | ✔ |
+| **ADMIN** | ✔ | ✔ | ✔ | ✔ | ✔ |
+| **VIEWER** | ✔ | ✖ | ✖ | ✖ | ✖ |
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+# 📡 API Reference
+
+Base URL:
+```
+http://localhost:3000/api
+```
+
+---
+
+## 🔐 POST /auth/login
+
+### Request
+```json
+{
+  "email": "admin@example.com",
+  "password": "password123"
+}
+```
+
+### Response
+```json
+{
+  "access_token": "..."
+}
+```
+
+---
+
+## 📌 GET /tasks
+
+### Response
+```json
+[
+  {
+    "id": "123",
+    "title": "Prepare project briefing",
+    "status": "OPEN",
+    "organizationId": "ORG-A"
+  }
+]
+```
+
+---
+
+## 📝 POST /tasks
+
+### Request
+```json
+{
+  "title": "New Task",
+  "status": "OPEN",
+  "organizationId": "ORG-A"
+}
+```
+
+### Response
+```json
+{
+  "id": "abc",
+  "title": "New Task",
+  "status": "OPEN"
+}
+```
+
+---
+
+## ✏️ PUT /tasks/:id
+
+### Request
+```json
+{
+  "title": "Updated Task",
+  "status": "IN_PROGRESS"
+}
+```
+
+### Response
+```json
+{
+  "id": "abc",
+  "title": "Updated Task",
+  "status": "IN_PROGRESS"
+}
+```
+
+---
+
+## ❌ DELETE /tasks/:id
+
+### Response
+```json
+{
+  "success": true,
+  "deletedId": "abc"
+}
+```
+
+---
+
+## 👤 POST /users
+
+Protected by `users.manage` permission (OWNER role by default).
+
+### Request
+```json
+{
+  "email": "new.user@example.com",
+  "password": "Password123!",
+  "name": "New User",
+  "organizationId": "ORG-A",
+  "roleName": "ADMIN"
+}
+```
+
+### Response
+```json
+{
+  "id": "user-id",
+  "email": "new.user@example.com",
+  "name": "New User",
+  "organizationId": "ORG-A",
+  "role": {
+    "id": "role-id",
+    "name": "ADMIN"
+  }
+}
+```
+
+# 🎨 Frontend Overview
+
+- Angular standalone components  
+- TailwindCSS styling  
+- Dark/Light mode  
+- Task status visualization bar  
+- JWT authentication  
+
+---
+
+# 🧰 Setup Instructions
+
+1. Install deps: `npm install`
+2. Export `JWT_SECRET` before starting the API (must be the same for issuing and validating tokens), then run the backend (e.g., `npm run start` / `nx serve api`) and frontend as usual.
+3. Seeded owner user: `owner@example.com` / `password123` — use this to obtain a token with `users.manage` for creating users via `POST /api/users`.
+
+---
+
+# 🧭 Future Considerations
+
+### **1. Trello-Style Custom Status Columns**  
+### **2. Drag & Drop (Angular CDK)**  
+### **3. Real-Time WebSockets Collaboration**  
+### **4. Admin UI for Organizations**  
+### **5. Advanced Analytics & Charts**  
+### **6. Postgres Migration**  
+
+---
+
+# 🖼 Screenshots
+
+*(Add your images here)*
+
+```
+![Login Screen](./screenshots/login.png)
+![Dashboard](./screenshots/dashboard.png)
+![Dark Mode](./screenshots/dark-mode.png)
+```

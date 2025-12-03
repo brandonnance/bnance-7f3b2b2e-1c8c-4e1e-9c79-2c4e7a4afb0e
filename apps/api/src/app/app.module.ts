@@ -13,6 +13,7 @@ import { AccessControlModule } from './access-control/access-control.module';
 import { AuditLog } from './audit-log/audit-log.entity';
 import { AuditLogModule } from './audit-log/audit-log.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthModule } from './auth/auth.module';
     AccessControlModule,
     AuditLogModule,
     AuthModule,
+    UsersModule,
     TypeOrmModule.forFeature([User, Organization, Role, Permission, Task]),
   ],
   controllers: [AppController],

@@ -5,12 +5,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { JwtStrategy } from './jwt.strategy';
+import { getJwtSecret } from './jwt.config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: 'supersecretkey',
+      secret: getJwtSecret(),
       signOptions: { expiresIn: '1d' },
     }),
   ],
