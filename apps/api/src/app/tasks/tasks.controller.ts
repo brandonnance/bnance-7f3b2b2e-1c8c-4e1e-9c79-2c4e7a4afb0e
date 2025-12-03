@@ -28,17 +28,34 @@ export class TasksController {
   @RequirePermission('tasks.read')
   findAll(@Req() req: any) {
     const orgId = req.user?.organizationId as string | undefined;
+    console.log('GET /tasks for user', req.user, '-> orgId =', orgId);
     return this.tasksService.findAll(orgId);
   }
 
   @Post()
   @RequirePermission('tasks.create')
   async create(@Req() req: any, @Body() dto: CreateTaskDto) {
-    const role = ((req.headers['x-role'] as string) || 'VIEWER').toUpperCase();
-    const orgIdHeader = req.headers['x-org-id'] as string | undefined;
-    const orgId = orgIdHeader ?? dto.organizationId ?? null;
+    const jwtUser = req.user as
+      | { organizationId?: string; role?: string }
+      | undefined;
 
-    const task = await this.tasksService.create(dto);
+    const role = (
+      jwtUser?.role ||
+      (req.headers['x-role'] as string) ||
+      'VIEWER'
+    ).toUpperCase();
+
+    const orgId =
+      jwtUser?.organizationId ??
+      (req.headers['x-org-id'] as string | undefined) ??
+      dto.organizationId ??
+      null;
+
+    console.log('POST /tasks for user', jwtUser, '-> orgId =', orgId);
+    const task = await this.tasksService.create({
+      ...dto,
+      organizationId: orgId,
+    });
 
     await this.auditLogService.logTaskAction({
       action: 'TASK_CREATED',

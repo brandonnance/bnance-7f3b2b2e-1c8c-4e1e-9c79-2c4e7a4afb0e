@@ -22,6 +22,7 @@ A full-stack task management platform built with **Nx**, **NestJS**, **Angular**
 - [API Reference](#api-reference)  
 - [Frontend Overview](#frontend-overview)  
 - [Setup Instructions](#setup-instructions)  
+- [Frontend Demo & Screenshots](#frontend-demo--screenshots)  
 - [Future Considerations](#future-considerations)  
 - [Screenshots](#screenshots)
 
@@ -326,6 +327,8 @@ Protected by `users.manage` permission (OWNER role by default).
 }
 ```
 
+---
+
 # 🎨 Frontend Overview
 
 - Angular standalone components  
@@ -344,6 +347,30 @@ Protected by `users.manage` permission (OWNER role by default).
 
 ---
 
+# 🎬 Frontend Demo & Screenshots
+
+Task Scheduler – role-based task management demo with a clean Angular + Tailwind UI (light/dark theme, Kanban-style dashboard, statistics, and inline editing).
+
+## 🚀 Frontend features
+
+- 🔐 Demo authentication (email + password)
+- 🌗 Light & Dark Mode toggle
+- 🧱 Kanban layout – Open / In Progress / Done
+- ✏️ Inline task editing
+- ➕ Task creation panel
+- 📊 Completion & status metrics
+- 📱 Responsive centered “app window” layout
+- 🎨 Theme-driven UI with Tailwind utility patterns
+
+## ▶️ Frontend quickstart
+
+```bash
+ng serve          # or: npx nx serve task-scheduler
+# then visit http://localhost:4200
+```
+
+---
+
 # 🧭 Future Considerations
 
 ### **1. Trello-Style Custom Status Columns**  
@@ -357,10 +384,8 @@ Protected by `users.manage` permission (OWNER role by default).
 
 # 🖼 Screenshots
 
-*(Add your images here)*
+![Login Screen – Dark](./screenshots/Screenshot-2025-11-17-093806.png)
+![Dashboard – Dark](./screenshots/Screenshot-2025-11-17-093814.png)
+![Dashboard – Light](./screenshots/Screenshot-2025-11-17-093823.png)
 
-```
-![Login Screen](./screenshots/login.png)
-![Dashboard](./screenshots/dashboard.png)
-![Dark Mode](./screenshots/dark-mode.png)
-```
+> Place the PNG files inside a `/screenshots` folder in your repo.

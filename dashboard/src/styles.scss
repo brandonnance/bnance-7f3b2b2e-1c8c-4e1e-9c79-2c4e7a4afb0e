@@ -2,37 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base body — sizing only, theme colors come from .dark-theme / .light-theme */
 body {
-  @apply bg-slate-950 bg-gradient-to-b from-slate-950 to-slate-900 text-slate-50;
   min-height: 100vh;
 }
 
-.card {
-  @apply rounded-xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-black/30;
-}
+/* ---- Theme backgrounds & text ---- */
 
 body.dark-theme {
-  @apply bg-slate-950 text-slate-50;
+  @apply bg-slate-950 bg-gradient-to-b from-slate-950 to-slate-900 text-slate-50;
 }
 
 body.light-theme {
   @apply bg-slate-100 text-slate-900;
 }
 
-/* Shell-style cards (we'll apply .card-shell in the template) */
+/* ---- Header ---- */
+
+body.dark-theme .app-header {
+  @apply bg-slate-950/90 border-b border-slate-800 text-slate-50;
+}
+
+body.light-theme .app-header {
+  @apply bg-white/95 border-b border-slate-200 text-slate-900;
+}
+
+/* ---- Generic card shell ---- */
+
 body.dark-theme .card-shell {
-  @apply bg-slate-900/80 border border-slate-800 text-slate-50 shadow-lg shadow-black/30;
+  @apply bg-slate-900/90 border border-slate-800 text-slate-50 shadow-lg shadow-black/30;
 }
 
 body.light-theme .card-shell {
   @apply bg-white border border-slate-200 text-slate-900 shadow-md;
 }
 
-/* Optional: header background tweak */
-body.dark-theme .app-header {
-  @apply bg-slate-950/80 border-b border-slate-800;
+/* ---- Form controls ---- */
+
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+  @apply bg-slate-900 border border-slate-700 text-slate-50 placeholder-slate-500;
 }
 
-body.light-theme .app-header {
-  @apply bg-white/80 border-b border-slate-200;
+body.light-theme input,
+body.light-theme textarea,
+body.light-theme select {
+  @apply bg-white border border-slate-300 text-slate-900 placeholder-slate-500;
+}
+
+/* ---- Muted text ---- */
+
+body.dark-theme .muted {
+  @apply text-slate-400;
+}
+
+body.light-theme .muted {
+  @apply text-slate-500;
+}
+
+h2 {
 }

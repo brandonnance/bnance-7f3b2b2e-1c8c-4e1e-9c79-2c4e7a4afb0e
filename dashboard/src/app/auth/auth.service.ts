@@ -2,9 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 interface LoginResponse {
   access_token: string;
+}
+
+type RoleName = 'OWNER' | 'ADMIN' | 'VIEWER';
+
+interface DecodedToken {
+  sub: string;
+  email: string;
+  role: RoleName;
+  organizationId: string;
+  iat: number;
+  exp: number;
 }
 
 @Injectable({
@@ -49,5 +61,31 @@ export class AuthService {
 
   private hasToken(): boolean {
     return !!localStorage.getItem(this.tokenKey);
+  }
+
+  getRole(): RoleName | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const decoded = jwtDecode<DecodedToken>(token);
+      return decoded.role ?? null;
+    } catch (e) {
+      console.error('Error decoding token', e);
+      return null;
+    }
+  }
+
+  getOrganizationId(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const decoded = jwtDecode<DecodedToken>(token);
+      return decoded.organizationId ?? null;
+    } catch (err) {
+      console.error('Error decoding token', err);
+      return null;
+    }
   }
 }

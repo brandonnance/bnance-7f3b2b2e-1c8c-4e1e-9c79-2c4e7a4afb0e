@@ -1,741 +1,725 @@
 <!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
 
-<div
-  class="min-h-screen bg-slate-950 bg-gradient-to-b from-slate-950 to-slate-900 text-slate-50"
->
-  <!-- Top Nav -->
-  <header
-    class="app-header border-b border-slate-800/80 bg-slate-950/70 backdrop-blur"
-  >
-    <div
-      class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4"
-    >
-      <div class="flex items-center gap-3">
-        <div>
-          <div class="font-semibold tracking-tight">Task Scheduler</div>
-          <div class="text-[11px] text-slate-400">
-            Role-based task management demo
-          </div>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <ng-container *ngIf="isAuthenticated; else loginHeader">
-          <span
-            class="inline-flex items-center gap-2 rounded-full bg-slate-900/80 border border-slate-700 px-3 py-1 text-xs text-slate-300"
-          >
-            <span
-              class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"
-            ></span>
-            {{ email }}
-          </span>
-          <button
-            (click)="logout()"
-            class="text-xs px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80 transition-colors"
-          >
-            Logout
-          </button>
-        </ng-container>
-
-        <ng-template #loginHeader>
-          <span
-            class="text-xs px-3 py-1 rounded-full border border-slate-700 text-slate-400"
-          >
-            Not signed in
-          </span>
-        </ng-template>
-
-        <!-- Theme toggle -->
-        <button
-          type="button"
-          (click)="toggleTheme()"
-          class="text-xs px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80 transition-colors flex items-center gap-1"
-          title="Toggle dark/light mode"
-        >
-          <span *ngIf="isDarkMode">☀️ Light</span>
-          <span *ngIf="!isDarkMode">🌙 Dark</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main -->
-  <main class="max-w-6xl mx-auto px-4 py-8">
-    <!-- LOGIN VIEW -->
-    <section
-      *ngIf="!isAuthenticated; else dashboard"
-      class="flex justify-center"
+<div class="min-h-screen flex items-start justify-center py-6 px-2 md:px-4">
+  <div class="w-full max-w-6xl">
+    <!-- Top Nav -->
+    <header
+      class="app-header backdrop-blur px-4 py-3 flex items-center justify-between"
     >
       <div
-        class="card-shell w-full max-w-md mt-10 bg-slate-900/80 border border-slate-800 rounded-2xl p-8 shadow-xl shadow-black/40"
+        class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4"
       >
-        <h1
-          class="text-2xl font-semibold mb-2 tracking-tight text-slate-50 text-center"
-        >
-          Sign in to Task Scheduler
-        </h1>
-
-        <form (ngSubmit)="login()" class="space-y-4">
-          <div class="space-y-1">
-            <label class="block text-xs font-medium text-slate-300">
-              Email
-            </label>
-            <input
-              type="email"
-              [(ngModel)]="email"
-              name="email"
-              class="w-full rounded-lg bg-slate-950 border border-slate-700/80 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/80 focus:border-transparent placeholder:text-slate-500"
-              placeholder="owner@example.com"
-            />
-          </div>
-
-          <div class="space-y-1">
-            <label class="block text-xs font-medium text-slate-300">
-              Password
-            </label>
-            <input
-              type="password"
-              [(ngModel)]="password"
-              name="password"
-              class="w-full rounded-lg bg-slate-950 border border-slate-700/80 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/80 focus:border-transparent placeholder:text-slate-500"
-              placeholder="••••••••"
-            />
-          </div>
-
-          <div *ngIf="error" class="text-xs text-red-400 mt-1">{{ error }}</div>
-
-          <button
-            type="submit"
-            [disabled]="loading"
-            class="w-full mt-4 flex justify-center items-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-sm font-semibold py-2.5 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-          >
-            <span *ngIf="!loading">Sign in</span>
-            <span *ngIf="loading">Signing in…</span>
-          </button>
-
-          <div class="mt-3 text-[11px] text-slate-500 text-center">
-            Demo credentials:
-            <span class="font-mono">owner@example.com / password123</span>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- DASHBOARD VIEW -->
-    <ng-template #dashboard>
-      <section class="space-y-5">
-        <!-- Page header -->
-        <div
-          class="flex flex-col md:flex-row md:items-center md:justify-between gap-3"
-        >
+        <div class="flex items-center gap-3">
           <div>
-            <h1
-              class="text-xl md:text-2xl font-semibold tracking-tight text-slate-50"
-            >
-              Tasks Dashboard
-            </h1>
-          </div>
-          <div class="flex items-center gap-2 text-xs text-slate-400">
-            <span
-              class="inline-flex items-center gap-1 rounded-full bg-slate-900/80 px-3 py-1 border border-slate-700"
-            >
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-              Connected to API
-            </span>
-            <button
-              (click)="loadTasks()"
-              class="px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80 transition-colors"
-            >
-              Refresh
-            </button>
+            <div class="font-semibold tracking-tight">Task Scheduler</div>
+            <div class="text-[11px]">Role-based task management demo</div>
           </div>
         </div>
 
-        <!-- Stats / Visualization row -->
-        <div class="grid gap-4 md:grid-cols-3">
-          <!-- Completion card -->
-          <div class="card-shell rounded-xl p-4 text-sm flex flex-col gap-2">
-            <div class="flex items-center justify-between">
-              <div>
-                <div
-                  class="text-xs font-semibold text-slate-300 uppercase tracking-wide"
-                >
-                  Completion
-                </div>
-                <div class="text-lg font-semibold">
-                  {{ completionPercent }}%
-                </div>
-              </div>
-              <div class="text-[11px] text-slate-500">
-                {{ completedTasks }} / {{ totalTasks }} done
-              </div>
-            </div>
-            <div class="mt-1">
-              <div
-                class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden"
-              >
-                <div
-                  class="h-2 rounded-full bg-emerald-500 transition-all duration-300"
-                  [style.width.%]="completionPercent"
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Status counts  -->
-          <div
-            class="card-shell rounded-xl p-4 text-sm flex flex-col justify-center"
-          >
-            <div
-              class="text-xs font-semibold text-slate-300 uppercase tracking-wide mb-2"
+        <div class="flex items-center gap-3">
+          <ng-container *ngIf="isAuthenticated; else loginHeader">
+            <span
+              class="inline-flex items-center gap-2 rounded-full hover:bg-slate-900/80 transition-colors border border-slate-600 px-3 py-1 text-xs transition-colors"
             >
-              Status breakdown
+              <span
+                class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"
+              ></span>
+              {{ email }}
+            </span>
+            <button
+              (click)="logout()"
+              class="text-xs px-3 py-1 rounded-md border border-slate-600 hover:bg-slate-800/80 transition-colors"
+            >
+              Logout
+            </button>
+          </ng-container>
+
+          <ng-template #loginHeader>
+            <span
+              class="text-xs px-3 py-1 rounded-full border border-slate-600 muted"
+            >
+              Not signed in
+            </span>
+          </ng-template>
+
+          <!-- Theme toggle -->
+          <button
+            type="button"
+            (click)="toggleTheme()"
+            class="text-xs px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80 transition-colors flex items-center gap-1"
+            title="Toggle dark/light mode"
+          >
+            <span *ngIf="!isDarkMode">☀️ Light</span>
+            <span *ngIf="isDarkMode">🌙 Dark</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="min-h-screen bg-transparent">
+      <!-- LOGIN VIEW -->
+      <section
+        *ngIf="!isAuthenticated; else dashboard"
+        class="flex justify-center"
+      >
+        <div class="card-shell w-full max-w-md mt-10 rounded-2xl p-8">
+          <h1 class="text-2xl font-semibold mb-2 tracking-tight text-center">
+            Sign in to Task Scheduler
+          </h1>
+
+          <form (ngSubmit)="login()" class="space-y-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-medium muted"> Email </label>
+              <input
+                type="email"
+                [(ngModel)]="email"
+                name="email"
+                class="w-full rounded-md px-3 py-2 text-sm"
+                placeholder="owner@example.com"
+              />
             </div>
-            <div class="flex flex-wrap gap-3 text-[11px] text-slate-400">
-              <span>Open: {{ openTasks.length }}</span>
-              <span>In Progress: {{ inProgressTasks.length }}</span>
-              <span>Done: {{ doneTasks.length }}</span>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-medium muted"> Password </label>
+              <input
+                type="password"
+                [(ngModel)]="password"
+                name="password"
+                class="w-full rounded-md px-3 py-2 text-sm"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <div *ngIf="error" class="text-xs text-red-400 mt-1">
+              {{ error }}
+            </div>
+
+            <button
+              type="submit"
+              [disabled]="loading"
+              class="w-full mt-4 flex justify-center items-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-sm font-semibold py-2.5 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            >
+              <span *ngIf="!loading">Sign in</span>
+              <span *ngIf="loading">Signing in…</span>
+            </button>
+
+            <div class="mt-3 text-[11px] text-slate-500 text-center">
+              Demo credentials:
+              <span class="font-mono">owner@example.com / password123</span>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- DASHBOARD VIEW -->
+      <ng-template #dashboard>
+        <section class="space-y-5">
+          <!-- Page header -->
+          <div
+            class="flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+          >
+            <div>
+              <h1 class="text-xl md:text-2xl font-semibold tracking-tight">
+                Tasks Dashboard
+              </h1>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span
+                class="inline-flex items-center gap-2 rounded-full hover:bg-slate-900/80 transition-colors border border-slate-600 px-3 py-1 text-xs transition-colors"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                Connected to API
+              </span>
+              <button
+                (click)="loadTasks()"
+                class="px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80 transition-colors"
+              >
+                Refresh
+              </button>
             </div>
           </div>
 
-          <!-- Chart -->
-          <div class="card-shell rounded-xl p-4 text-xs flex flex-col gap-2">
-            <div class="flex items-center justify-between mb-1">
-              <div class="font-semibold text-slate-300">Status chart</div>
-              <div class="text-[11px] text-slate-500">
-                Share of tasks by status
-              </div>
-            </div>
-
-            <div class="space-y-2 mt-1">
-              <!-- Open -->
-              <div>
-                <div class="flex justify-between text-[11px] mb-1">
-                  <span class="text-sky-300">Open</span>
-                  <span class="text-slate-500">
-                    {{ openCount }} ({{ openPercentOfTotal }}%)
-                  </span>
+          <!-- Stats / Visualization row -->
+          <div class="grid gap-4 md:grid-cols-3">
+            <!-- Completion card -->
+            <div class="card-shell rounded-xl p-4 text-sm flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-semibold uppercase tracking-wide">
+                    Completion
+                  </div>
+                  <div class="text-lg font-semibold">
+                    {{ completionPercent }}%
+                  </div>
                 </div>
-                <div
-                  class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden"
-                >
-                  <div
-                    class="h-2 rounded-full bg-sky-500 transition-all duration-300"
-                    [style.width.%]="openPercentOfTotal"
-                  ></div>
+                <div class="text-[11px] muted">
+                  {{ completedTasks }} / {{ totalTasks }} done
                 </div>
               </div>
-
-              <!-- In Progress -->
-              <div>
-                <div class="flex justify-between text-[11px] mb-1">
-                  <span class="text-amber-300">In Progress</span>
-                  <span class="text-slate-500">
-                    {{ inProgressCount }} ({{ inProgressPercentOfTotal }}%)
-                  </span>
-                </div>
-                <div
-                  class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden"
-                >
-                  <div
-                    class="h-2 rounded-full bg-amber-500 transition-all duration-300"
-                    [style.width.%]="inProgressPercentOfTotal"
-                  ></div>
-                </div>
-              </div>
-
-              <!-- Done -->
-              <div>
-                <div class="flex justify-between text-[11px] mb-1">
-                  <span class="text-emerald-300">Done</span>
-                  <span class="text-slate-500">
-                    {{ doneCount }} ({{ donePercentOfTotal }}%)
-                  </span>
-                </div>
+              <div class="mt-1">
                 <div
                   class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden"
                 >
                   <div
                     class="h-2 rounded-full bg-emerald-500 transition-all duration-300"
-                    [style.width.%]="donePercentOfTotal"
+                    [style.width.%]="completionPercent"
                   ></div>
                 </div>
               </div>
             </div>
 
-            <div class="mt-2 text-[10px] text-slate-500">
-              Bars are proportional to total task count.
+            <!-- Status counts  -->
+            <div
+              class="card-shell rounded-xl p-4 text-sm flex flex-col justify-center"
+            >
+              <div class="text-xs font-semibold uppercase tracking-wide mb-2">
+                Status breakdown
+              </div>
+              <div class="flex flex-wrap gap-3 text-[11px]">
+                <span>Open: {{ openTasks.length }}</span>
+                <span>In Progress: {{ inProgressTasks.length }}</span>
+                <span>Done: {{ doneTasks.length }}</span>
+              </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="card-shell rounded-xl p-4 text-xs flex flex-col gap-2">
+              <div class="flex items-center justify-between mb-1">
+                <div class="font-semibold">Status chart</div>
+                <div class="text-[11px] muted">Share of tasks by status</div>
+              </div>
+
+              <div class="space-y-2 mt-1">
+                <!-- Open -->
+                <div>
+                  <div class="flex justify-between text-[11px] mb-1">
+                    <span class="text-sky-300">Open</span>
+                    <span class="text-slate-500">
+                      {{ openCount }} ({{ openPercentOfTotal }}%)
+                    </span>
+                  </div>
+                  <div
+                    class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden"
+                  >
+                    <div
+                      class="h-2 rounded-full bg-sky-500 transition-all duration-300"
+                      [style.width.%]="openPercentOfTotal"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- In Progress -->
+                <div>
+                  <div class="flex justify-between text-[11px] mb-1">
+                    <span class="text-amber-300">In Progress</span>
+                    <span class="text-slate-500">
+                      {{ inProgressCount }} ({{ inProgressPercentOfTotal }}%)
+                    </span>
+                  </div>
+                  <div
+                    class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden"
+                  >
+                    <div
+                      class="h-2 rounded-full bg-amber-500 transition-all duration-300"
+                      [style.width.%]="inProgressPercentOfTotal"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- Done -->
+                <div>
+                  <div class="flex justify-between text-[11px] mb-1">
+                    <span class="text-emerald-300">Done</span>
+                    <span class="text-slate-500">
+                      {{ doneCount }} ({{ donePercentOfTotal }}%)
+                    </span>
+                  </div>
+                  <div
+                    class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden"
+                  >
+                    <div
+                      class="h-2 rounded-full bg-emerald-500 transition-all duration-300"
+                      [style.width.%]="donePercentOfTotal"
+                    ></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Two-column layout: tasks + create panel -->
-        <div
-          class="grid gap-5 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)] items-start"
-        >
+          <!-- Two-column layout: tasks + create panel -->
           <div
-            class="card-shell rounded-2xl border border-slate-800 bg-slate-900/70 p-4 md:p-5 shadow-lg shadow-black/30"
+            class="grid gap-5 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)] items-start"
           >
-            <div class="flex items-center justify-between mb-3">
-              <h2 class="text-sm font-semibold text-slate-200">Your Tasks</h2>
-            </div>
-
-            <div *ngIf="tasksLoading" class="text-sm text-slate-400">
-              Loading tasks…
-            </div>
-            <div *ngIf="tasksError" class="text-sm text-red-400">
-              {{ tasksError }}
-            </div>
-
-            <div
-              *ngIf="!tasksLoading && tasks.length === 0"
-              class="text-sm text-slate-500 py-4 text-center border border-dashed border-slate-700 rounded-xl"
-            >
-              No tasks yet. Use the panel on the right to create your first one.
-            </div>
-
-            <!-- Kanban layout -->
-            <div
-              class="mt-3 grid gap-3 md:grid-cols-3"
-              *ngIf="tasks.length > 0"
-            >
-              <!-- Column: Open -->
-              <div class="space-y-2">
-                <div class="flex items-center justify-between mb-1">
-                  <h3
-                    class="text-xs font-semibold uppercase tracking-wide text-slate-300"
-                  >
-                    Open
-                  </h3>
-                  <span class="text-[11px] text-slate-500">
-                    {{ openTasks.length }}
-                  </span>
-                </div>
-
-                <div
-                  class="min-h-[120px] rounded-xl border border-slate-800 bg-slate-950/40 p-2 flex flex-col gap-2"
-                >
-                  <div
-                    *ngFor="let task of openTasks"
-                    class="rounded-lg border border-slate-700/80 bg-slate-900/90 p-3 text-xs space-y-1 relative"
-                  >
-                    <!-- Delete button (hidden while editing) -->
-                    <button
-                      *ngIf="editingTaskId !== task.id"
-                      (click)="deleteTask(task.id)"
-                      class="absolute top-1.5 right-1.5 text-slate-500 hover:text-red-400 text-[11px]"
-                      title="Delete task"
-                    >
-                      ✕
-                    </button>
-
-                    <!-- VIEW MODE -->
-                    <ng-container
-                      *ngIf="editingTaskId !== task.id; else editModeOpen"
-                    >
-                      <div class="flex items-start justify-between pr-5 gap-2">
-                        <div>
-                          <div
-                            class="font-semibold text-slate-50 leading-snug text-[13px]"
-                          >
-                            {{ task.title }}
-                          </div>
-                          <p
-                            class="text-slate-300 text-[11px]"
-                            *ngIf="task.description"
-                          >
-                            {{ task.description }}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div
-                        class="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-slate-500 mt-1"
-                      >
-                        <span *ngIf="task.dueDate">
-                          Due: {{ task.dueDate | date : 'mediumDate' }}
-                        </span>
-                        <span *ngIf="task.organizationId">
-                          Org: {{ task.organizationId }}
-                        </span>
-                      </div>
-
-                      <div class="pt-1">
-                        <button
-                          (click)="startEdit(task)"
-                          class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                        >
-                          Edit
-                        </button>
-                        <br /><br />
-                        <button
-                          (click)="changeTaskStatus(task, 'IN_PROGRESS')"
-                          class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                        >
-                          Move to In Progress
-                        </button>
-                        <br />
-                        <button
-                          (click)="changeTaskStatus(task, 'DONE')"
-                          class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                        >
-                          Mark Done
-                        </button>
-                      </div>
-                    </ng-container>
-
-                    <!-- EDIT MODE (open column) -->
-                    <ng-template #editModeOpen>
-                      <form
-                        (ngSubmit)="saveEdit(task.id)"
-                        class="space-y-1 pt-1 pr-2"
-                      >
-                        <input
-                          type="text"
-                          [(ngModel)]="editTask.title"
-                          name="edit_title_open_{{ task.id }}"
-                          class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 outline-none"
-                        />
-
-                        <textarea
-                          [(ngModel)]="editTask.description"
-                          name="edit_description_open_{{ task.id }}"
-                          rows="2"
-                          class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-[11px] focus:ring-2 focus:ring-emerald-500 outline-none"
-                          placeholder="Description"
-                        ></textarea>
-
-                        <div class="flex justify-end gap-2 pt-1">
-                          <button
-                            type="button"
-                            (click)="cancelEdit()"
-                            class="text-[10px] px-2.5 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="submit"
-                            class="text-[10px] px-2.5 py-1 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-semibold"
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </form>
-                    </ng-template>
-                  </div>
-                </div>
+            <div class="card-shell rounded-2xl p-4 md:p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h2 class="text-sm font-semibold">Your Tasks</h2>
               </div>
 
-              <!-- Column: In Progress -->
-              <div class="space-y-2">
-                <div class="flex items-center justify-between mb-1">
-                  <h3
-                    class="text-xs font-semibold uppercase tracking-wide text-slate-300"
-                  >
-                    In Progress
-                  </h3>
-                  <span class="text-[11px] text-slate-500">
-                    {{ inProgressTasks.length }}
-                  </span>
-                </div>
-
-                <div
-                  class="min-h-[120px] rounded-xl border border-slate-800 bg-slate-950/40 p-2 flex flex-col gap-2"
-                >
-                  <div
-                    *ngFor="let task of inProgressTasks"
-                    class="rounded-lg border border-slate-700/80 bg-slate-900/90 p-3 text-xs space-y-1 relative"
-                  >
-                    <button
-                      *ngIf="editingTaskId !== task.id"
-                      (click)="deleteTask(task.id)"
-                      class="absolute top-1.5 right-1.5 text-slate-500 hover:text-red-400 text-[11px]"
-                      title="Delete task"
-                    >
-                      ✕
-                    </button>
-
-                    <ng-container
-                      *ngIf="editingTaskId !== task.id; else editModeInProgress"
-                    >
-                      <div class="flex items-start justify-between pr-5 gap-2">
-                        <div>
-                          <div
-                            class="font-semibold text-slate-50 leading-snug text-[13px]"
-                          >
-                            {{ task.title }}
-                          </div>
-                          <p
-                            class="text-slate-300 text-[11px]"
-                            *ngIf="task.description"
-                          >
-                            {{ task.description }}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div
-                        class="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-slate-500 mt-1"
-                      >
-                        <span *ngIf="task.dueDate">
-                          Due: {{ task.dueDate | date : 'mediumDate' }}
-                        </span>
-                        <span *ngIf="task.organizationId">
-                          Org: {{ task.organizationId }}
-                        </span>
-                      </div>
-
-                      <div class="pt-1">
-                        <button
-                          (click)="startEdit(task)"
-                          class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                        >
-                          Edit
-                        </button>
-                        <br /><br />
-                        <button
-                          (click)="changeTaskStatus(task, 'OPEN')"
-                          class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                        >
-                          Move to Open
-                        </button>
-                        <br />
-                        <button
-                          (click)="changeTaskStatus(task, 'DONE')"
-                          class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                        >
-                          Mark Done
-                        </button>
-                      </div>
-                    </ng-container>
-
-                    <ng-template #editModeInProgress>
-                      <form
-                        (ngSubmit)="saveEdit(task.id)"
-                        class="space-y-1 pt-1 pr-2"
-                      >
-                        <input
-                          type="text"
-                          [(ngModel)]="editTask.title"
-                          name="edit_title_progress_{{ task.id }}"
-                          class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 outline-none"
-                        />
-                        <textarea
-                          [(ngModel)]="editTask.description"
-                          name="edit_description_progress_{{ task.id }}"
-                          rows="2"
-                          class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-[11px] focus:ring-2 focus:ring-emerald-500 outline-none"
-                          placeholder="Description"
-                        ></textarea>
-                        <div class="flex justify-end gap-2 pt-1">
-                          <button
-                            type="button"
-                            (click)="cancelEdit()"
-                            class="text-[10px] px-2.5 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="submit"
-                            class="text-[10px] px-2.5 py-1 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-semibold"
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </form>
-                    </ng-template>
-                  </div>
-                </div>
+              <div *ngIf="tasksLoading" class="text-sm">Loading tasks…</div>
+              <div *ngIf="tasksError" class="text-sm text-red-400">
+                {{ tasksError }}
               </div>
 
-              <!-- Column: Done -->
-              <div class="space-y-2">
-                <div class="flex items-center justify-between mb-1">
-                  <h3
-                    class="text-xs font-semibold uppercase tracking-wide text-slate-300"
-                  >
-                    Done
-                  </h3>
-                  <span class="text-[11px] text-slate-500">
-                    {{ doneTasks.length }}
-                  </span>
-                </div>
-
-                <div
-                  class="min-h-[120px] rounded-xl border border-slate-800 bg-slate-950/40 p-2 flex flex-col gap-2"
-                >
-                  <div
-                    *ngFor="let task of doneTasks"
-                    class="rounded-lg border border-slate-700/80 bg-slate-900/90 p-3 text-xs space-y-1 relative"
-                  >
-                    <button
-                      *ngIf="editingTaskId !== task.id"
-                      (click)="deleteTask(task.id)"
-                      class="absolute top-1.5 right-1.5 text-slate-500 hover:text-red-400 text-[11px]"
-                      title="Delete task"
-                    >
-                      ✕
-                    </button>
-
-                    <ng-container
-                      *ngIf="editingTaskId !== task.id; else editModeDone"
-                    >
-                      <div class="flex items-start justify-between pr-5 gap-2">
-                        <div>
-                          <div
-                            class="font-semibold text-slate-50 leading-snug text-[13px]"
-                          >
-                            {{ task.title }}
-                          </div>
-                          <p
-                            class="text-slate-300 text-[11px]"
-                            *ngIf="task.description"
-                          >
-                            {{ task.description }}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div
-                        class="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-slate-500 mt-1"
-                      >
-                        <span *ngIf="task.dueDate">
-                          Completed by: {{ task.dueDate | date : 'mediumDate' }}
-                        </span>
-                        <span *ngIf="task.organizationId">
-                          Org: {{ task.organizationId }}
-                        </span>
-                      </div>
-
-                      <div class="pt-1">
-                        <button
-                          (click)="startEdit(task)"
-                          class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                        >
-                          Edit
-                        </button>
-                        <br /><br />
-                        <button
-                          (click)="changeTaskStatus(task, 'IN_PROGRESS')"
-                          class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                        >
-                          Move to In Progress
-                        </button>
-                        <br />
-                        <button
-                          (click)="changeTaskStatus(task, 'OPEN')"
-                          class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                        >
-                          Move to Open
-                        </button>
-                      </div>
-                    </ng-container>
-
-                    <ng-template #editModeDone>
-                      <form
-                        (ngSubmit)="saveEdit(task.id)"
-                        class="space-y-1 pt-1 pr-2"
-                      >
-                        <input
-                          type="text"
-                          [(ngModel)]="editTask.title"
-                          name="edit_title_done_{{ task.id }}"
-                          class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 outline-none"
-                        />
-                        <textarea
-                          [(ngModel)]="editTask.description"
-                          name="edit_description_done_{{ task.id }}"
-                          rows="2"
-                          class="w-full rounded-lg bg-slate-950 border border-slate-700 px-2.5 py-1.5 text-[11px] focus:ring-2 focus:ring-emerald-500 outline-none"
-                          placeholder="Description"
-                        ></textarea>
-                        <div class="flex justify-end gap-2 pt-1">
-                          <button
-                            type="button"
-                            (click)="cancelEdit()"
-                            class="text-[10px] px-2.5 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="submit"
-                            class="text-[10px] px-2.5 py-1 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-semibold"
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </form>
-                    </ng-template>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Create Task column -->
-          <aside
-            class="card-shell rounded-2xl border border-slate-800 bg-slate-900/80 p-4 md:p-5 shadow-lg shadow-black/30 space-y-4"
-          >
-            <div>
-              <h2 class="text-sm font-semibold text-slate-200">
-                Create New Task
-              </h2>
-            </div>
-
-            <form (ngSubmit)="createTask()" class="space-y-3">
-              <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  [(ngModel)]="newTask.title"
-                  name="title"
-                  placeholder="e.g. Review vet records"
-                  class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none placeholder:text-slate-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">
-                  Description
-                </label>
-                <textarea
-                  [(ngModel)]="newTask.description"
-                  name="description"
-                  rows="3"
-                  placeholder="Optional details or context for this task"
-                  class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none placeholder:text-slate-500"
-                ></textarea>
-              </div>
-
-              <div class="flex items-center gap-3">
-                <div class="flex-1">
-                  <label class="block text-xs font-medium text-slate-300 mb-1">
-                    Status
-                  </label>
-                  <select
-                    [(ngModel)]="newTask.status"
-                    name="status"
-                    class="w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
-                  >
-                    <option value="OPEN">Open</option>
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="DONE">Done</option>
-                  </select>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                class="w-full mt-1 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 rounded-lg text-slate-900 text-sm font-semibold transition-colors"
+              <div
+                *ngIf="!tasksLoading && tasks.length === 0"
+                class="text-sm text-slate-500 py-4 text-center border border-dashed border-slate-700 rounded-xl"
               >
-                Create Task
-              </button>
-            </form>
-          </aside>
-        </div>
-      </section>
-    </ng-template>
-  </main>
+                <ng-container *ngIf="canModifyTasks; else readOnlyEmptyState">
+                  No tasks yet. Use the panel on the right to create your first
+                  one.
+                </ng-container>
+                <ng-template #readOnlyEmptyState>
+                  No tasks assigned yet.
+                </ng-template>
+              </div>
+
+              <!-- Kanban layout -->
+              <div
+                class="mt-3 grid gap-3 md:grid-cols-3"
+                *ngIf="tasks.length > 0"
+              >
+                <!-- Column: Open -->
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between mb-1">
+                    <h3 class="text-xs font-semibold uppercase tracking-wide">
+                      Open
+                    </h3>
+                    <span class="text-[11px] text-slate-500">
+                      {{ openTasks.length }}
+                    </span>
+                  </div>
+
+                  <div
+                    class="min-h-[120px] rounded-xl card-shell p-2 flex flex-col gap-2"
+                  >
+                    <div
+                      *ngFor="let task of openTasks"
+                      class="rounded-lg border border-slate-700/50 p-3 text-xs space-y-1 relative"
+                    >
+                      <!-- Delete button (hidden while editing) -->
+                      <button
+                        *ngIf="canModifyTasks && editingTaskId !== task.id"
+                        (click)="deleteTask(task.id)"
+                        class="absolute top-1.5 right-1.5 text-slate-500 hover:text-red-400 text-[11px]"
+                        title="Delete task"
+                      >
+                        ✕
+                      </button>
+
+                      <!-- VIEW MODE -->
+                      <ng-container
+                        *ngIf="editingTaskId !== task.id; else editModeOpen"
+                      >
+                        <div
+                          class="flex items-start justify-between pr-5 gap-2"
+                        >
+                          <div>
+                            <div class="font-semibold leading-snug text-[13px]">
+                              {{ task.title }}
+                            </div>
+                            <p
+                              class="muted text-[11px]"
+                              *ngIf="task.description"
+                            >
+                              {{ task.description }}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div
+                          class="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-slate-500 mt-1"
+                        >
+                          <span *ngIf="task.dueDate">
+                            Due: {{ task.dueDate | date : 'mediumDate' }}
+                          </span>
+                          <span *ngIf="task.organizationId">
+                            Org: {{ task.organizationId }}
+                          </span>
+                        </div>
+
+                        <div class="pt-1">
+                          <button
+                            *ngIf="canModifyTasks"
+                            (click)="startEdit(task)"
+                            class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                          >
+                            Edit
+                          </button>
+                          <br /><br />
+                          <button
+                            *ngIf="canModifyTasks"
+                            (click)="changeTaskStatus(task, 'IN_PROGRESS')"
+                            class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                          >
+                            Move to In Progress
+                          </button>
+                          <br />
+                          <button
+                            *ngIf="canModifyTasks"
+                            (click)="changeTaskStatus(task, 'DONE')"
+                            class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                          >
+                            Mark Done
+                          </button>
+                        </div>
+                      </ng-container>
+
+                      <!-- EDIT MODE (open column) -->
+                      <ng-template #editModeOpen>
+                        <form
+                          (ngSubmit)="saveEdit(task.id)"
+                          class="space-y-1 pt-1 pr-2"
+                        >
+                          <input
+                            type="text"
+                            [(ngModel)]="editTask.title"
+                            name="edit_title_open_{{ task.id }}"
+                            class="w-full rounded-md px-3 py-2 text-sm"
+                          />
+
+                          <textarea
+                            [(ngModel)]="editTask.description"
+                            name="edit_description_open_{{ task.id }}"
+                            rows="2"
+                            class="w-full rounded-md px-3 py-2 text-sm"
+                            placeholder="Description"
+                          ></textarea>
+
+                          <div class="flex justify-end gap-2 pt-1">
+                            <button
+                              type="button"
+                              (click)="cancelEdit()"
+                              class="text-[10px] px-2.5 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="submit"
+                              class="text-[10px] px-2.5 py-1 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-semibold"
+                            >
+                              Save
+                            </button>
+                          </div>
+                        </form>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Column: In Progress -->
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between mb-1">
+                    <h3 class="text-xs font-semibold uppercase tracking-wide">
+                      In Progress
+                    </h3>
+                    <span class="text-[11px] text-slate-500">
+                      {{ inProgressTasks.length }}
+                    </span>
+                  </div>
+
+                  <div
+                    class="min-h-[120px] rounded-xl card-shell p-2 flex flex-col gap-2"
+                  >
+                    <div
+                      *ngFor="let task of inProgressTasks"
+                      class="rounded-lg border border-slate-700/50 p-3 text-xs space-y-1 relative"
+                    >
+                      <button
+                        *ngIf="canModifyTasks && editingTaskId !== task.id"
+                        (click)="deleteTask(task.id)"
+                        class="absolute top-1.5 right-1.5 text-slate-500 hover:text-red-400 text-[11px]"
+                        title="Delete task"
+                      >
+                        ✕
+                      </button>
+
+                      <ng-container
+                        *ngIf="editingTaskId !== task.id; else editModeInProgress"
+                      >
+                        <div
+                          class="flex items-start justify-between pr-5 gap-2"
+                        >
+                          <div>
+                            <div class="font-semibold leading-snug text-[13px]">
+                              {{ task.title }}
+                            </div>
+                            <p
+                              class="muted text-[11px]"
+                              *ngIf="task.description"
+                            >
+                              {{ task.description }}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div
+                          class="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-slate-500 mt-1"
+                        >
+                          <span *ngIf="task.dueDate">
+                            Due: {{ task.dueDate | date : 'mediumDate' }}
+                          </span>
+                          <span *ngIf="task.organizationId">
+                            Org: {{ task.organizationId }}
+                          </span>
+                        </div>
+
+                        <div class="pt-1">
+                          <button
+                            *ngIf="canModifyTasks"
+                            (click)="startEdit(task)"
+                            class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                          >
+                            Edit
+                          </button>
+                          <br /><br />
+                          <button
+                            *ngIf="canModifyTasks"
+                            (click)="changeTaskStatus(task, 'OPEN')"
+                            class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                          >
+                            Move to Open
+                          </button>
+                          <br />
+                          <button
+                            *ngIf="canModifyTasks"
+                            (click)="changeTaskStatus(task, 'DONE')"
+                            class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                          >
+                            Mark Done
+                          </button>
+                        </div>
+                      </ng-container>
+
+                      <ng-template #editModeInProgress>
+                        <form
+                          (ngSubmit)="saveEdit(task.id)"
+                          class="space-y-1 pt-1 pr-2"
+                        >
+                          <input
+                            type="text"
+                            [(ngModel)]="editTask.title"
+                            name="edit_title_progress_{{ task.id }}"
+                            class="w-full rounded-md px-3 py-2 text-sm"
+                          />
+                          <textarea
+                            [(ngModel)]="editTask.description"
+                            name="edit_description_progress_{{ task.id }}"
+                            rows="2"
+                            class="w-full rounded-md px-3 py-2 text-sm"
+                            placeholder="Description"
+                          ></textarea>
+                          <div class="flex justify-end gap-2 pt-1">
+                            <button
+                              type="button"
+                              (click)="cancelEdit()"
+                              class="text-[10px] px-2.5 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="submit"
+                              class="text-[10px] px-2.5 py-1 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-semibold"
+                            >
+                              Save
+                            </button>
+                          </div>
+                        </form>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Column: Done -->
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between mb-1">
+                    <h3 class="text-xs font-semibold uppercase tracking-wide">
+                      Done
+                    </h3>
+                    <span class="text-[11px] text-slate-500">
+                      {{ doneTasks.length }}
+                    </span>
+                  </div>
+
+                  <div
+                    class="min-h-[120px] rounded-xl card-shell p-2 flex flex-col gap-2"
+                  >
+                    <div
+                      *ngFor="let task of doneTasks"
+                      class="rounded-lg border border-slate-700/50 p-3 text-xs space-y-1 relative"
+                    >
+                      <button
+                        *ngIf="canModifyTasks && editingTaskId !== task.id"
+                        (click)="deleteTask(task.id)"
+                        class="absolute top-1.5 right-1.5 text-slate-500 hover:text-red-400 text-[11px]"
+                        title="Delete task"
+                      >
+                        ✕
+                      </button>
+
+                      <ng-container
+                        *ngIf="editingTaskId !== task.id; else editModeDone"
+                      >
+                        <div
+                          class="flex items-start justify-between pr-5 gap-2"
+                        >
+                          <div>
+                            <div class="font-semibold leading-snug text-[13px]">
+                              {{ task.title }}
+                            </div>
+                            <p
+                              class="muted text-[11px]"
+                              *ngIf="task.description"
+                            >
+                              {{ task.description }}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div
+                          class="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-slate-500 mt-1"
+                        >
+                          <span *ngIf="task.dueDate">
+                            Completed by: {{ task.dueDate | date : 'mediumDate'
+                            }}
+                          </span>
+                          <span *ngIf="task.organizationId">
+                            Org: {{ task.organizationId }}
+                          </span>
+                        </div>
+
+                        <div class="pt-1">
+                          <button
+                            *ngIf="canModifyTasks"
+                            (click)="startEdit(task)"
+                            class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                          >
+                            Edit
+                          </button>
+                          <br /><br />
+                          <button
+                            *ngIf="canModifyTasks"
+                            (click)="changeTaskStatus(task, 'IN_PROGRESS')"
+                            class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                          >
+                            Move to In Progress
+                          </button>
+                          <br />
+                          <button
+                            *ngIf="canModifyTasks"
+                            (click)="changeTaskStatus(task, 'OPEN')"
+                            class="text-[10px] px-2 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                          >
+                            Move to Open
+                          </button>
+                        </div>
+                      </ng-container>
+
+                      <ng-template #editModeDone>
+                        <form
+                          (ngSubmit)="saveEdit(task.id)"
+                          class="space-y-1 pt-1 pr-2"
+                        >
+                          <input
+                            type="text"
+                            [(ngModel)]="editTask.title"
+                            name="edit_title_done_{{ task.id }}"
+                            class="w-full rounded-md px-3 py-2 text-sm"
+                          />
+                          <textarea
+                            [(ngModel)]="editTask.description"
+                            name="edit_description_done_{{ task.id }}"
+                            rows="2"
+                            class="w-full rounded-md px-3 py-2 text-sm"
+                            placeholder="Description"
+                          ></textarea>
+                          <div class="flex justify-end gap-2 pt-1">
+                            <button
+                              type="button"
+                              (click)="cancelEdit()"
+                              class="text-[10px] px-2.5 py-1 rounded-md border border-slate-700 hover:bg-slate-800/80"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="submit"
+                              class="text-[10px] px-2.5 py-1 rounded-md bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-semibold"
+                            >
+                              Save
+                            </button>
+                          </div>
+                        </form>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Create Task column -->
+            <aside class="card-shell rounded-2xl p-4 md:p-5 space-y-4">
+              <div *ngIf="canModifyTasks">
+                <div>
+                  <h2 class="text-sm font-semibold">Create New Task</h2>
+                </div>
+
+                <form (ngSubmit)="createTask()" class="space-y-3">
+                  <div>
+                    <label class="block text-xs font-medium mb-1">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      [(ngModel)]="newTask.title"
+                      name="title"
+                      placeholder="e.g. Review vet records"
+                      class="w-full rounded-md px-3 py-2 text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      [(ngModel)]="newTask.description"
+                      name="description"
+                      rows="3"
+                      placeholder="Optional details or context for this task"
+                      class="w-full rounded-md px-3 py-2 text-sm"
+                    ></textarea>
+                  </div>
+
+                  <div class="flex items-center gap-3">
+                    <div class="flex-1">
+                      <label class="block text-xs font-medium mb-1">
+                        Status
+                      </label>
+                      <select
+                        [(ngModel)]="newTask.status"
+                        name="status"
+                        class="w-full rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                      >
+                        <option value="OPEN">Open</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="DONE">Done</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="w-full mt-1 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 rounded-lg text-slate-900 text-sm font-semibold transition-colors"
+                  >
+                    Create Task
+                  </button>
+                </form>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </ng-template>
+    </main>
+  </div>
 </div>
