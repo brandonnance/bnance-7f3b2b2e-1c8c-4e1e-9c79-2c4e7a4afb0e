@@ -35,11 +35,16 @@ export class TasksService {
     return this.taskRepo.save(task);
   }
 
-  async remove(id: string) {
+  async remove(id: string, userOrgId: string) {
     const task = await this.taskRepo.findOne({ where: { id } });
 
     if (!task) {
       throw new NotFoundException('Task with id {id} not found');
+    }
+    if (task.organizationId !== userOrgId) {
+      throw new NotFoundException(
+        'Cannot delete tasks that are not in your organization'
+      );
     }
 
     await this.taskRepo.remove(task);
@@ -47,11 +52,17 @@ export class TasksService {
     return { success: true };
   }
 
-  async update(id: string, dto: UpdateTaskDto) {
+  async update(id: string, userOrgId: string, dto: UpdateTaskDto) {
     const task = await this.taskRepo.findOne({ where: { id } });
 
     if (!task) {
       throw new NotFoundException('Task with id ${id} not found');
+    }
+
+    if (task.organizationId !== userOrgId) {
+      throw new NotFoundException(
+        'Cannot update tasks that are not in your organization'
+      );
     }
 
     // Apply Updates

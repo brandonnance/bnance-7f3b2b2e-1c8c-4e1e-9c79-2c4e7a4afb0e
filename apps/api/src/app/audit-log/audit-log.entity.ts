@@ -27,4 +27,8 @@ export class AuditLog {
 
   @CreateDateColumn({ type: 'datetime' })
   createdAt: Date;
+
+  // add userId column to track which user performed the action
+  @Column({ type: 'text', nullable: true })
+  userId: string | null;
 }

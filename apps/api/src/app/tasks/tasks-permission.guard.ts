@@ -26,7 +26,7 @@ export class TasksPermissionGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
 
-    // ✅ Now we read role from the JWT-decoded user, not from headers
+    //  Now we read role from the JWT-decoded user
     const user = request.user as
       | { role?: string; organizationId?: string; userId?: string }
       | undefined;

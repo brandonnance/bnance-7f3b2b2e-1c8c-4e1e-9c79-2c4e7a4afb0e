@@ -18,6 +18,7 @@ export class AuditLogService {
     organizationId?: string | null;
     role: string;
     details?: string;
+    userId?: string | null;
   }) {
     const entry = this.repo.create({
       action: params.action,
@@ -25,6 +26,7 @@ export class AuditLogService {
       organizationId: params.organizationId ?? null,
       role: params.role,
       details: params.details ?? null,
+      userId: params.userId ?? null,
     });
 
     await this.repo.save(entry);

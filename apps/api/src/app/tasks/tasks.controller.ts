@@ -36,7 +36,7 @@ export class TasksController {
   @RequirePermission('tasks.create')
   async create(@Req() req: any, @Body() dto: CreateTaskDto) {
     const jwtUser = req.user as
-      | { organizationId?: string; role?: string }
+      | { organizationId?: string; role?: string; userId?: string }
       | undefined;
 
     const role = (
@@ -63,6 +63,7 @@ export class TasksController {
       organizationId: orgId,
       role,
       details: `Created task "${task.title}"`,
+      userId: jwtUser?.userId ?? null,
     });
 
     return task;
@@ -71,8 +72,11 @@ export class TasksController {
   @Delete(':id')
   @RequirePermission('tasks.delete')
   async remove(@Param('id') id: string, @Req() req: any) {
-    const role = ((req.headers['x-role'] as string) || 'VIEWER').toUpperCase();
-    const orgId = (req.headers['x-org-id'] as string) ?? null;
+    const role = ((req.user?.role as string) || 'VIEWER').toUpperCase();
+    const orgId = req.user?.organizationId as string;
+    const userId = (req.user?.userId as string) ?? null;
+
+    const deleteResult = await this.tasksService.remove(id, orgId);
 
     await this.auditLogService.logTaskAction({
       action: 'TASK_DELETED',
@@ -80,9 +84,10 @@ export class TasksController {
       organizationId: orgId,
       role,
       details: 'Deleted task ${id}',
+      userId: userId,
     });
 
-    return this.tasksService.remove(id);
+    return deleteResult;
   }
 
   @Put(':id')
@@ -92,10 +97,11 @@ export class TasksController {
     @Req() req: any,
     @Body() dto: UpdateTaskDto
   ) {
-    const role = ((req.headers['x-role'] as string) || 'VIEWER').toUpperCase();
-    const orgId = (req.headers['x-org-id'] as string) ?? null;
+    const role = ((req.user?.role as string) || 'VIEWER').toUpperCase();
+    const orgId = req.user?.organizationId as string;
+    const userId = (req.user?.userId as string) ?? null;
 
-    const task = await this.tasksService.update(id, dto);
+    const task = await this.tasksService.update(id, orgId, dto);
 
     await this.auditLogService.logTaskAction({
       action: 'TASK_UPDATED',
@@ -103,6 +109,7 @@ export class TasksController {
       organizationId: orgId,
       role,
       details: 'Updated task ${id}',
+      userId: userId,
     });
 
     return task;

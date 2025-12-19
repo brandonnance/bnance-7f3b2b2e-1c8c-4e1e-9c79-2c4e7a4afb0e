@@ -15,6 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     // Whatever we return here becomes req.user
+    // If null or bad data, 401 Unauthorized is thrown
     return {
       userId: payload.sub,
       email: payload.email,
